@@ -1,94 +1,78 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+function Signin() {
 	const [username, setUsername] = useState("");
-	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
-	const handleSignIn = async (e) => {
-		e.preventDefault();
+	const handleSignin = async () => {
 		try {
 			const response = await axios.post("/api/user/signin", {
 				username,
 				password,
 			});
 			localStorage.setItem("token", response.data.token);
-			console.log("Sign-in successful:", response.data);
+			navigate("/todos");
 		} catch (error) {
-			console.error(
-				"Sign-in error:",
-				error.response?.data?.message || error.message,
-			);
-		}
-	};
-
-	const handleSignUp = async () => {
-		try {
-			const response = await axios.post("/api/user/signup", {
-				username,
-				email,
-				password,
-			});
-			console.log("Sign-up successful:", response.data);
-		} catch (error) {
-			console.error(
-				"Sign-up error:",
-				error.response?.data?.message || error.message,
-			);
+			console.error("Signin failed:", error);
 		}
 	};
 
 	return (
-		<div className="h-screen flex items-center justify-center bg-gray-50">
-			<div className="w-96 bg-white shadow-2xl border border-neutral-200 rounded-2xl p-6">
-				<form onSubmit={handleSignIn} className="space-y-4">
-					<input
-						type="text"
-						placeholder="Username"
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
-						className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-gray-900 placeholder-gray-400 "
-					/>
-
-					<input
-						type="email"
-						placeholder="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-gray-900 placeholder-gray-400 "
-					/>
-					<input
-						type="password"
-						placeholder="Password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-gray-900 palceholder-gray-400"
-					/>
-					<button
-						type="submit"
-						onClick={handleSignIn}
-						className="w-full bg-amber-500 text-white py-3 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-50 transition disabled:bg-amber-300 disabled:cursor-not-allowed"
-					>
-						Sign In
-					</button>
+		<div className="flex justify-center items-center h-screen">
+			<div className="w-full max-w-xs">
+				<form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+					<div className="mb-4">
+						<label
+							className="block text-gray-700 text-sm font-bold mb-2"
+							htmlFor="username"
+						>
+							Username
+						</label>
+						<input
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							id="username"
+							type="text"
+							placeholder="Username"
+							onChange={(e) => setUsername(e.target.value)}
+						/>
+					</div>
+					<div className="mb-6">
+						<label
+							className="block text-gray-700 text-sm font-bold mb-2"
+							htmlFor="password"
+						>
+							Password
+						</label>
+						<input
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+							id="password"
+							type="password"
+							placeholder="******************"
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</div>
+					<div className="flex items-center justify-between">
+						<button
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+							type="button"
+							onClick={handleSignin}
+						>
+							Sign In
+						</button>
+						<a
+							className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+							href="/signup"
+						>
+							Sign Up
+						</a>
+					</div>
 				</form>
-
-				{/* Divider */}
-				<div className="flex items-center my-6">
-					<div className="flex-grow h-px bg-gray-300"></div>
-					<span className="px-2 text-sm text-gray-500">or</span>
-					<div className="flex-grow h-px bg-gray-300"></div>
-				</div>
-
-				{/* Sign Up Button */}
-				<button
-					onClick={handleSignUp}
-					className="w-full bg-amber-400 text-white py-3 rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-opacity-50 transition"
-				>
-					Sign Up
-				</button>
 			</div>
 		</div>
 	);
 }
+
+export default Signin;

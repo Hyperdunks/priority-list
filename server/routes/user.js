@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { userModel } from "../db.js";
 import { hash, compare } from "bcrypt";
-const JWT_USER_PASSWORD = process.env.JWT_SECRET;
+const JWT_USER_PASSWORD = process.env.JWT_SECRET || "some_secure_password";
 
 const userRouter = Router();
 
