@@ -19,10 +19,7 @@ const userSchema = new Schema({
 
 const todoSchema = new Schema(
 	{
-		username: {
-			type: ObjectId,
-			ref: "user",
-			required: true,
+		username: { type: ObjectId, ref: "user", required: true,
 		}, // a foreign key connecting both tables together
 		title: {
 			type: String,

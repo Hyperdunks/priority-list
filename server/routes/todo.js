@@ -19,6 +19,13 @@ todoRouter.get("/", async (req, res) => {
 todoRouter.post("/", async (req, res) => {
   try {
     const { title, priority } = req.body;
+    if (!title || typeof title !== "string" || title.trim().length === 0) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+    const allowedPriorities = ["low", "medium", "high"];
+    if (priority && !allowedPriorities.includes(priority)) {
+      return res.status(400).json({ message: "Invalid priority" });
+    }
     const newTodo = await todoModel.create({
       title,
       priority,

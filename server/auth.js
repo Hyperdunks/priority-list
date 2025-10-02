@@ -1,23 +1,20 @@
 import jwt from "jsonwebtoken";
-const { verify } = jwt;
-const JWT_USER_PASSWORD =
-	process.env.JWT_USER_PASSWORD || "some_secure_password";
 
-// TODO: Improvement with token storing in local.storage
+const JWT_SECRET = process.env.JWT_SECRET || "some_secure_password";
+
 function userAuth(req, res, next) {
-	const token = req.headers.token;
-	const decoded = verify(token, JWT_USER_PASSWORD);
+	const token = req.headers?.token || req.headers?.authorization?.replace("Bearer ", "");
+	if (!token) {
+		return res.status(401).json({ message: "Missing auth token" });
+	}
 
-	if (decoded) {
+	try {
+		const decoded = jwt.verify(token, JWT_SECRET);
 		req.userId = decoded.id;
-		next();
-	} else {
-		res.status(403).json({
-			message: "You are not signed in",
-		});
+		return next();
+	} catch (error) {
+		return res.status(401).json({ message: "Invalid or expired token" });
 	}
 }
 
-export default {
-	userAuth,
-};
+export default { userAuth };

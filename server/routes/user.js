@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { userModel } from "../db.js";
 import { hash, compare } from "bcrypt";
-const JWT_USER_PASSWORD = process.env.JWT_SECRET || "some_secure_password";
+const JWT_SECRET = process.env.JWT_SECRET || "some_secure_password";
 
 const userRouter = Router();
 
@@ -34,7 +34,7 @@ userRouter.post("/signup", async function (req, res) {
 
 		const token = jwt.sign(
 			{ id: dbUser._id, username: dbUser.username },
-			JWT_USER_PASSWORD,
+			JWT_SECRET,
 		);
 
 		res.status(201).json({
@@ -73,13 +73,13 @@ userRouter.post("/signin", async function (req, res) {
 
 		if (!isPasswordCorrect) {
 			return res.status(401).json({
-				message: "Invalid credentials (passowrd is incorrect)",
+				message: "Invalid credentials (password is incorrect)",
 			});
 		}
 
 		const token = jwt.sign(
 			{ id: user._id, username: user.username },
-			JWT_USER_PASSWORD,
+			JWT_SECRET,
 		);
 
 		res.json({
