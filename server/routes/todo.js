@@ -18,7 +18,7 @@ todoRouter.get("/", async (req, res) => {
 
 todoRouter.post("/", async (req, res) => {
   try {
-    const { title, priority } = req.body;
+    const { title, priority, dueDate } = req.body;
     if (!title || typeof title !== "string" || title.trim().length === 0) {
       return res.status(400).json({ message: "Title is required" });
     }
@@ -26,9 +26,18 @@ todoRouter.post("/", async (req, res) => {
     if (priority && !allowedPriorities.includes(priority)) {
       return res.status(400).json({ message: "Invalid priority" });
     }
+    let parsedDueDate;
+    if (dueDate) {
+      const timestamp = Date.parse(dueDate);
+      if (Number.isNaN(timestamp)) {
+        return res.status(400).json({ message: "Invalid dueDate" });
+      }
+      parsedDueDate = new Date(timestamp);
+    }
     const newTodo = await todoModel.create({
       title,
       priority,
+      dueDate: parsedDueDate,
       username: req.userId,
     });
     res.status(201).json(newTodo);

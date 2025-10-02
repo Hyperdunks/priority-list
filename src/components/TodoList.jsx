@@ -60,6 +60,13 @@ function TodoList() {
     }
   };
 
+  const overdueCount = todos.filter((t) => {
+    if (!t.dueDate || t.completed) return false;
+    const due = new Date(t.dueDate);
+    const today = new Date();
+    return due < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }).length;
+
   const handleSignout = () => {
     navigate("/signout");
   };
@@ -93,6 +100,18 @@ function TodoList() {
           <span>Sign Out</span>
         </button>
       </div>
+      {overdueCount > 0 && (
+        <div className="mb-4 flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 px-3 py-2 text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+            <path d="M12 9v4" />
+            <path d="M12 17h.01" />
+            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          </svg>
+          <span>
+            {overdueCount} {overdueCount === 1 ? 'task is' : 'tasks are'} overdue
+          </span>
+        </div>
+      )}
       <CreateTodo addTodo={addTodo} />
       <div>
         {todos.length === 0 ? (
