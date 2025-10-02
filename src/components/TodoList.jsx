@@ -36,6 +36,18 @@ function TodoList() {
     }
   };
 
+  const toggleCompleted = async (id, completed) => {
+    try {
+      const token = localStorage.getItem("token");
+      const { data } = await axios.patch(`/api/todo/${id}`, { completed }, {
+        headers: { token },
+      });
+      setTodos(todos.map((t) => (t._id === id ? data : t)));
+    } catch (error) {
+      console.error("Failed to toggle todo:", error);
+    }
+  };
+
   const deleteTodo = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -53,11 +65,11 @@ function TodoList() {
   };
 
   return (
-    <div className="container mx-auto mt-10">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Todo List</h1>
+    <div className="max-w-2xl mx-auto mt-10 px-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-semibold text-gray-900">Your Tasks</h1>
         <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg"
           onClick={handleSignout}
         >
           Sign Out
@@ -66,7 +78,7 @@ function TodoList() {
       <CreateTodo addTodo={addTodo} />
       <div>
         {todos.map((todo) => (
-          <TodoItem key={todo._id} todo={todo} deleteTodo={deleteTodo} />
+          <TodoItem key={todo._id} todo={todo} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} />
         ))}
       </div>
     </div>

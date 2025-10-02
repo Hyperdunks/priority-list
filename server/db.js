@@ -27,11 +27,7 @@ const todoSchema = new Schema(
 		},
 		description: String,
 		date: { type: Date, default: Date.now },
-		status: {
-			type: String,
-			enum: ["completed", "pending", "in-progress"],
-			default: "pending",
-		},
+		completed: { type: Boolean, default: false },
 		dueDate: Date,
 		priority: {
 			type: String,
