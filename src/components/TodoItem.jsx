@@ -2,24 +2,58 @@ import React from 'react';
 
 const TodoItem = ({ todo, deleteTodo, toggleCompleted }) => {
   return (
-    <div className={`flex items-center justify-between p-3 my-2 rounded-xl border transition ${todo.completed ? 'bg-green-50 border-green-200' : 'bg-white border-gray-100'} shadow-sm hover:shadow`}>
-      <div className="flex items-center gap-3">
+    <div className={`group flex items-center justify-between p-4 my-3 rounded-2xl border transition ${todo.completed ? 'bg-green-50/60 border-green-200' : 'bg-white border-gray-100'} shadow-sm hover:shadow-md`}>
+      <div className="flex items-center gap-3 min-w-0">
         <input
           id={`todo-${todo._id}`}
           type="checkbox"
-          className="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500"
+          className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
           checked={!!todo.completed}
           onChange={(e) => toggleCompleted(todo._id, e.target.checked)}
         />
-        <label htmlFor={`todo-${todo._id}`} className={`text-lg ${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+        <label htmlFor={`todo-${todo._id}`} className={`text-base sm:text-lg truncate ${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
           {todo.title}
         </label>
       </div>
-      <div className="flex items-center">
-        <span className={`px-2 py-1 text-xs font-medium text-white rounded-full ${todo.priority === 'high' ? 'bg-red-500' : todo.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'}`}>
-          {todo.priority}
+      <div className="flex items-center shrink-0">
+        <span
+          className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 border border-gray-200"
+          title={`${todo.priority} priority`}
+          aria-label={`${todo.priority} priority`}
+        >
+          <span
+            className={`block h-2.5 w-2.5 rounded-full ${
+              todo.priority === 'high'
+                ? 'bg-red-500'
+                : todo.priority === 'medium'
+                ? 'bg-amber-500'
+                : 'bg-emerald-500'
+            }`}
+          />
         </span>
-        <button onClick={() => deleteTodo(todo._id)} className="ml-4 px-3 py-1.5 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
+        <button
+          onClick={() => deleteTodo(todo._id)}
+          className="ml-3 inline-flex items-center justify-center w-9 h-9 rounded-full text-rose-600 hover:text-white hover:bg-rose-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 transition"
+          aria-label="Delete todo"
+          title="Delete"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="w-5 h-5"
+          >
+            <path d="M3 6h18" />
+            <path d="M8 6v-.5A2.5 2.5 0 0 1 10.5 3.5h3A2.5 2.5 0 0 1 16 5.5V6" />
+            <path d="M6 6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+          </svg>
+        </button>
       </div>
     </div>
   );
